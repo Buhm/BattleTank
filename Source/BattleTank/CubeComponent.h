@@ -2,7 +2,9 @@
 
 #pragma once
 
+#include "BattleTank.h"
 #include "Components/ActorComponent.h"
+#include "Tank.h"
 #include "CubeComponent.generated.h"
 
 
