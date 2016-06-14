@@ -4,9 +4,22 @@
 #include "BattleTank.h"
 #include "TankPlayerController.h" //must be the last include
 
+
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	PrimaryActorTick.bCanEverTick = true;
+
+
+	//AimTowardsCrosshair();
+}
+
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	
+
 	auto ControlledTank = GetControlledTank();
 	if (!ControlledTank)
 	{
@@ -24,4 +37,12 @@ ATank* ATankPlayerController::GetControlledTank() const
 	return Cast<ATank>(GetPawn());
 }
 
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (!GetControlledTank) { return; }
+
+	// get world location if linetrace through crosshair
+	// if it hits the landscape
+		// 
+}
 
