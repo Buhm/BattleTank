@@ -2,6 +2,7 @@
 
 #pragma once
 
+#define Int32 = int;
 #include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
@@ -19,8 +20,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	// reach of the view in order to grab
-	float Reach = 2000.0f;
+	int32 ViewportSizeX, ViewportSizeY;
 
 	ATank* GetControlledTank() const;
 
