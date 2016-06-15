@@ -10,8 +10,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	PrimaryActorTick.bCanEverTick = true;
 
-
-	//AimTowardsCrosshair();
+	AimTowardsCrosshair();
 }
 
 
@@ -39,10 +38,46 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank) { return; }
+	FHitResult HitLocation; //OUTPARAMETER
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
-	// get world location if linetrace through crosshair
-	// if it hits the landscape
-		// 
+	UE_LOG(LogTemp, Warning, TEXT("%s = hitlocation"), *HitLocation.ToString())
+
+		GetWorld()->LineTraceSingleByObjectType(
+			HitLocation,
+			GetReachLineStart(),
+			GetReachLineEnd(),
+			FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+			TraceParameters
+		);
+		// get world location if linetrace through crosshair
+		// if it hits the landscape
+			// 
+	return;
 }
 
+FVector ATankPlayerController::GetReachLineStart()
+{
+	// get the player viewpoint this tick
+	FVector ViewPointLocation;
+	FRotator ViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		ViewPointLocation,	// OUT
+		ViewPointRotation	// OUT
+	);
+
+	return ViewPointLocation;
+}
+
+FVector ATankPlayerController::GetReachLineEnd()
+{
+	// get the player viewpoint this tick
+	FVector ViewPointLocation;
+	FRotator ViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		ViewPointLocation,   // OUT
+		ViewPointRotation	// OUT
+	);
+
+	return ViewPointLocation + (ViewPointRotation.Vector() * Reach);
+}
