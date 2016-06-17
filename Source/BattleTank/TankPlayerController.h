@@ -16,9 +16,20 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-public:
+private:
 
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+		float CrosshairXLocation = 0.5;
+
+	UPROPERTY(EditAnywhere)
+		float CrosshairYLocation = 0.33333;
+
+	//UPROPERTY(editAnywhere)
+		//float EndLocation;
+		
+	float Range = 1000000.0f;
 
 	int32 ViewportSizeX, ViewportSizeY;
 
@@ -31,4 +42,10 @@ public:
 	void AimTowardsCrosshair();
 
 	bool GetSightRayHitLocation(FVector& HitLocation);
+
+	bool GetLookDirection(FVector2D ScreenLocation, FVector WorldDirection) const; 
+
+	FVector GetReachLineStart();
+
+	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation);
 };
