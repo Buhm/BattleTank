@@ -12,7 +12,14 @@ void ATankAIController::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("%s has found FPController: %s"), *GetAIControlledTank()->GetName(), *GetPlayerTank()->GetName())
 }
 
-
+void ATankAIController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	PrimaryActorTick.bCanEverTick = true;
+	
+	GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
+	UE_LOG(LogTemp, Warning, TEXT("%s AI is aiming at %s"), *GetName(), *GetPlayerTank()->GetActorLocation().ToString())
+}
 
 ATank* ATankAIController::GetAIControlledTank() const
 {

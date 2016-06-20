@@ -13,7 +13,12 @@ class BATTLETANK_API ATank : public APawn
 
 public:
 	// Sets default values for this pawn's properties
-	ATank();
+
+	void AimAt(FVector HitLocation);
+	
+	virtual void Tank();
+
+private:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
