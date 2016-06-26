@@ -16,7 +16,7 @@ public:
 
 	void AimAt(FVector HitLocation);
 	
-	virtual void Tank();
+	ATank();
 
 private:
 

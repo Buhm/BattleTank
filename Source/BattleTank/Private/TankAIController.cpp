@@ -9,7 +9,6 @@ void ATankAIController::BeginPlay()
 	Super::BeginPlay();
 	GetAIControlledTank();
 	GetPlayerTank();
-	UE_LOG(LogTemp, Warning, TEXT("%s has found FPController: %s"), *GetAIControlledTank()->GetName(), *GetPlayerTank()->GetName())
 }
 
 void ATankAIController::Tick(float DeltaSeconds)
@@ -17,24 +16,16 @@ void ATankAIController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	PrimaryActorTick.bCanEverTick = true;
 	
-	GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
-	UE_LOG(LogTemp, Warning, TEXT("%s AI is aiming at %s"), *GetName(), *GetPlayerTank()->GetActorLocation().ToString())
+	//GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
 }
 
 ATank* ATankAIController::GetAIControlledTank() const
 {
-	auto AIControlledTank = GetControlledTank();
-	
-		if (!AIControlledTank)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%s not possessing a AI Controller"), *AIControlledTank->GetName());
-			return nullptr;
-		}
-		
-	//UE_LOG(LogTemp, Warning, TEXT("%s has been possessed by AI Controller"), *AIControlledTank->GetName())
+	ATank* AIControlledTank = GetControlledTank();
+
+		if (!AIControlledTank)	{ return nullptr; }
+
 	return AIControlledTank;
-		
-		
 }
 
 
@@ -44,19 +35,19 @@ ATank * ATankAIController::GetPlayerTank() const
 	auto FPController = GetWorld()->GetFirstPlayerController();
 	auto ControlledTank = GetControlledTank();
 	
-
 		if (!FPController) {return nullptr;} //protects the pointer
 		else
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("%s has found FPController!"), *ControlledTank->GetName())
+			return Cast<ATank>(GetPawn());
 		}
 
-	return Cast<ATank>(GetPawn());
 }
 
 
 ATank* ATankAIController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
+
 }
+
 
