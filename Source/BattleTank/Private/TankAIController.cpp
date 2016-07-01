@@ -16,7 +16,7 @@ void ATankAIController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	PrimaryActorTick.bCanEverTick = true;
 	
-	GetControlledTank()->OutputPlayerControllerAimInAimComponent(GetPlayerTank()->GetActorLocation());
+	//GetControlledTank()->OutputPlayerControllerAimInAimComponent(GetPlayerTank()->GetActorLocation());
 
 	// fire if ready
 }

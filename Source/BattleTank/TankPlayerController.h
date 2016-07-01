@@ -43,11 +43,11 @@ private:
 	//start the tank moving the barrel so that a shot would hit where the crosshair intersects the world.
 	void AimTowardsCrosshair();
 
-	bool GetSightRayHitLocation(FVector HitLocation);
+	bool GetSightRayHitLocation(FVector& HitLocation);
 
-	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection);
+	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection); 
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
 
-	void AimAt(FVector WorldSpaceAim);
+	void OutputPlayerControllerAimInAimComponent(FVector HitLocation);
 };

@@ -38,15 +38,9 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 void ATank::OutputPlayerControllerAimInAimComponent(FVector HitLocation)
 {
-	if (!TankAimingComponent)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TankAimingComponent not set"))
-	}
-	else
-	{
-		TankAimingComponent->AimAt(HitLocation);
-		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
-	}
+		//TankAimingComponent->AimAt(HitLocation);
+		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
+	
 }
 
 

@@ -46,13 +46,14 @@ void ATankPlayerController::AimTowardsCrosshair()
 		// get world location of linetrace through crosshair
 		FVector HitLocation; //OUTPARAMETER
 		GetSightRayHitLocation(HitLocation);
+		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
 		GetControlledTank()->OutputPlayerControllerAimInAimComponent(HitLocation);
 	}
 
 	return;
 }
 
-bool ATankPlayerController::GetSightRayHitLocation(FVector HitLocation)
+bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 {
 	//find the crosshair position in pixel coordinates
 	int32 ViewportSizeX, ViewportSizeY;
@@ -61,19 +62,14 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector HitLocation)
 	//find the crosshair
 	FVector2D ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 
-		//De-project the screen position of the crosshair to a world direction
-		FVector LookDirection;
-		if (GetLookDirection(ScreenLocation, LookDirection))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s , LookDirection: %s"), *ScreenLocation.ToString(), *LookDirection.ToString())
-		}
-		
+	//De-project the screen position of the crosshair to a world direction
+	FVector LookDirection;
+	GetLookDirection(ScreenLocation, LookDirection);
 	
-		//UE_LOG(LogTemp, Warning, TEXT("Test"))
-			// line-trace along that look direction, and see what we hit (up to max range)
-		GetLookVectorHitLocation(LookDirection, HitLocation);
+	// line-trace along that look direction, and see what we hit (up to max range)
+	GetLookVectorHitLocation(LookDirection, HitLocation);
 
-		return true;
+	return true;
 }
 
 
@@ -98,50 +94,33 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	FVector StartLocation = PlayerCameraManager->GetCameraLocation();
 	FVector EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
-		if (GetWorld()->LineTraceSingleByChannel(
-			HitResult,
-			StartLocation,
-			EndLocation,
-			ECollisionChannel::ECC_Visibility)
-			)
+		if (GetWorld()->LineTraceSingleByChannel(HitResult,StartLocation,EndLocation,ECollisionChannel::ECC_Visibility))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("test"))
-				//draws the debug line
-				DrawDebugLine(GetWorld(),
-					StartLocation,
-					EndLocation,
-					FColor(255, 0, 0),
-					false,
-					0.0f,
-					0,
-					10.0f
-				);
-			
-			
-
-		HitLocation = HitResult.Location;
-		AActor *ActorHit = HitResult.GetActor(); // see what we hit
-			if (ActorHit)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *ActorHit->GetName())
-				
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("test failed"))
-			}
-			
-			return true;
-		}
 		
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString())
-			HitLocation = FVector(0);
-			
-			return false;
+			HitLocation = HitResult.Location;
+			AActor *ActorHit = HitResult.GetActor(); // see what we hit
+				if (ActorHit)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *ActorHit->GetName())
+				}
+							
+				return true;
 		}
-		
 	
+	HitLocation = FVector(0);
+
+	return false;	
 }
 
+
+//UE_LOG(LogTemp, Warning, TEXT("test"))
+////draws the debug line
+//DrawDebugLine(GetWorld(),
+//	StartLocation,
+//	EndLocation,
+//	FColor(255, 0, 0),
+//	false,
+//	0.0f,
+//	0,
+//	10.0f
+//);
