@@ -10,7 +10,10 @@ void ATankPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	PrimaryActorTick.bCanEverTick = true;
 
+	//no need to protect pointers a added at construction
+
 	AimTowardsCrosshair();
+	
 }
 
 
@@ -36,51 +39,48 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
+	
 	if (!GetControlledTank()) {	return;	}
 	else
 	{
 		// get world location of linetrace through crosshair
 		FVector HitLocation; //OUTPARAMETER
 		GetSightRayHitLocation(HitLocation);
-		
-		if (GetSightRayHitLocation(HitLocation))
-		{
-			GetControlledTank()->AimAt(HitLocation);
-			UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetControlledTank()->GetName(), *HitLocation.ToString())
-		};
-		
+		GetControlledTank()->OutputPlayerControllerAimInAimComponent(HitLocation);
 	}
 
 	return;
 }
 
-bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
+bool ATankPlayerController::GetSightRayHitLocation(FVector HitLocation)
 {
 	//find the crosshair position in pixel coordinates
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY); // the sizes/arguments are OUT parameters
 
 	//find the crosshair
-	auto ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
+	FVector2D ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 
 		//De-project the screen position of the crosshair to a world direction
 		FVector LookDirection;
 		if (GetLookDirection(ScreenLocation, LookDirection))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Lookdirection: %s"), *LookDirection.ToString())
+			UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s , LookDirection: %s"), *ScreenLocation.ToString(), *LookDirection.ToString())
 		}
-			;
+		
 	
+		//UE_LOG(LogTemp, Warning, TEXT("Test"))
 			// line-trace along that look direction, and see what we hit (up to max range)
-			GetLookVectorHitLocation(LookDirection, HitLocation);
+		GetLookVectorHitLocation(LookDirection, HitLocation);
 
-			return true;
+		return true;
 }
 
 
-bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector LookDirection) const
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection)
 {
 	FVector CameraWorldLocation; // To be discarded
+	
 	return DeprojectScreenPositionToWorld(
 		ScreenLocation.X,
 		ScreenLocation.Y,
@@ -93,44 +93,55 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 {
 
 	/// Ray-Cast/line-trace out to "reach" distance
-	FHitResult HitResult;
+	FHitResult HitResult; // OUT parameter used in linetracebychannel
 
-	auto StartLocation = PlayerCameraManager->GetCameraLocation();
-	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
+	FVector StartLocation = PlayerCameraManager->GetCameraLocation();
+	FVector EndLocation = StartLocation + (LookDirection * LineTraceRange);
+
 		if (GetWorld()->LineTraceSingleByChannel(
-			OUT HitResult,
+			HitResult,
 			StartLocation,
 			EndLocation,
 			ECollisionChannel::ECC_Visibility)
 			)
 		{
-			//draws the debug line
+			UE_LOG(LogTemp, Warning, TEXT("test"))
+				//draws the debug line
+				DrawDebugLine(GetWorld(),
+					StartLocation,
+					EndLocation,
+					FColor(255, 0, 0),
+					false,
+					0.0f,
+					0,
+					10.0f
+				);
 			
-			DrawDebugLine(GetWorld(),
-							StartLocation,
-							EndLocation,
-							FColor(255, 0, 0),
-							false,
-							0.0f,
-							0,
-							10.0f
-						);
 			
 
-			HitLocation = HitResult.Location;
-			AActor *ActorHit = HitResult.GetActor(); // see what we hit
-				if (ActorHit)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *ActorHit->GetName())
-					return true;
-
-				}
+		HitLocation = HitResult.Location;
+		AActor *ActorHit = HitResult.GetActor(); // see what we hit
+			if (ActorHit)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *ActorHit->GetName())
 				
-
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("test failed"))
+			}
+			
+			return true;
 		}
 		
-		HitLocation = FVector(0);
-		return false;
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString())
+			HitLocation = FVector(0);
+			
+			return false;
+		}
+		
 	
 }
 

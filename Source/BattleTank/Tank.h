@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "TankAimingComponent.h"
 #include "BattleTank.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
@@ -14,9 +15,13 @@ class BATTLETANK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 
-	void AimAt(FVector HitLocation);
-	
 	ATank();
+
+	void OutputPlayerControllerAimInAimComponent(FVector HitLocation);
+
+protected:
+
+	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
 
@@ -28,7 +33,6 @@ private:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-
 	
 	
 };
