@@ -44,10 +44,12 @@ void ATankPlayerController::AimTowardsCrosshair()
 	else
 	{
 		// get world location of linetrace through crosshair
-		FVector HitLocation; //OUTPARAMETER
-		GetSightRayHitLocation(HitLocation);
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
-		GetControlledTank()->OutputPlayerControllerAimInAimComponent(HitLocation);
+			FVector HitLocation; //OUTPARAMETER
+			GetSightRayHitLocation(HitLocation);
+
+			//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
+
+			GetControlledTank()->OutputPlayerControllerAimInAimingComponent(HitLocation);
 	}
 
 	return;
@@ -99,12 +101,13 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		
 			HitLocation = HitResult.Location;
 			AActor *ActorHit = HitResult.GetActor(); // see what we hit
-				if (ActorHit)
+				/*if (ActorHit)
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *ActorHit->GetName())
 				}
 							
 				return true;
+				*/
 		}
 	
 	HitLocation = FVector(0);

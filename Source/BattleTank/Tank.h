@@ -17,11 +17,16 @@ public:
 
 	ATank();
 
-	void OutputPlayerControllerAimInAimComponent(FVector HitLocation);
+	UFUNCTION(BluePrintCallable, Category = Setup)
+	void setBarrelReference(UStaticMeshComponent* BarrelToSet);
+
+	void OutputPlayerControllerAimInAimingComponent(FVector HitLocation);
+
 
 protected:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
 
 private:
 
