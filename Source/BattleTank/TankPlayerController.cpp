@@ -17,11 +17,18 @@ void ATankPlayerController::Tick(float DeltaTime)
 }
 
 
+ATank* ATankPlayerController::GetControlledTank() const
+{
+
+	return Cast<ATank>(GetPawn());
+
+}
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto ControlledTank = GetControlledTank();
+	ATank* ControlledTank = GetControlledTank();
 	if (!ControlledTank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Playcontroller not possessing a tank"));
@@ -30,11 +37,6 @@ void ATankPlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s has been possessed by TankPlayerController"), *ControlledTank->GetName())		
 	}
-}
-
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
 }
 
 void ATankPlayerController::AimTowardsCrosshair()

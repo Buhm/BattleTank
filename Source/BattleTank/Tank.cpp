@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
-#include "TankPlayerController.h"
 #include "Tank.h"
 
 
@@ -37,38 +36,13 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 }
 
 
+
 void ATank::AimAt(FVector HitLocation)
 {
-	if (!barrel) { return; }
+	
 
-	FVector OutLaunchVelocity;
-	FVector StartLocation = barrel->GetSocketLocation(FName("Projectile"));
-
-	//calculate the outLaunchVelocity 
-
-
-	if (UGameplayStatics::SuggestProjectileVelocity(
-
-		this,
-		OutLaunchVelocity,
-		StartLocation,
-		HitLocation,
-		LaunchSpeed,
-		false,
-		0,
-		0,
-		ESuggestProjVelocityTraceOption::DoNotTrace
-	)
-
-		) //calculate launch velocity
-	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto TankName = GetOwner()->GetName();
-		TankAimingComponent->AimAt(HitLocation, OutLaunchVelocity);
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *TankName, *HitLocation.ToString())
-
-	}
-
+		TankAimingComponent->AimAt(HitLocation);
+		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *TankName, *HitLocation.ToString())
 
 }
 

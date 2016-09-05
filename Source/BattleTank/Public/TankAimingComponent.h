@@ -24,11 +24,13 @@ public:
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 		
-	void AimAt(FVector HitLocation, FVector OutLaunchVelocity);
+	void AimAt(FVector HitLocation);
 
 private:
 
-	UStaticMeshComponent* barrel = nullptr;
+	UStaticMeshComponent* Barrel = nullptr;
 
+	UPROPERTY(EditAnywhere, category = firing)
+		float LaunchSpeed = 100000.; // TODO Find sensible default value later on
 	
 };

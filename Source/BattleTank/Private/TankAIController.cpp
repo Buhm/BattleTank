@@ -17,7 +17,9 @@ void ATankAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	PrimaryActorTick.bCanEverTick = true;
-	if (GetPlayerTank)
+
+	auto TestGetPlayerTank = GetPlayerTank();
+	if (TestGetPlayerTank)
 	{
 		FVector PlayerTankLocation = GetPlayerTank()->GetActorLocation();
 		GetControlledTank()->AimAt(PlayerTankLocation);
@@ -54,7 +56,6 @@ ATank * ATankAIController::GetPlayerTank() const
 ATank* ATankAIController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
-
 }
 
 

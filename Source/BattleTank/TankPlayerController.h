@@ -18,15 +18,10 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	
 public:
 
+	virtual void BeginPlay() override;
 	ATank* GetControlledTank() const;
 
-protected:
-
-	 
-
 private:
-
-	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
 		float CrosshairXLocation = 0.5;
@@ -38,8 +33,6 @@ private:
 		float LineTraceRange = 100000;
 
 	int32 ViewportSizeX, ViewportSizeY;
-
-	
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
@@ -53,5 +46,4 @@ private:
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
 
-	
 };
