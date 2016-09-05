@@ -17,7 +17,11 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
-	
+
+	ATank* GetControlledTank() const;
+
+protected:
+
 	 
 
 private:
@@ -35,7 +39,7 @@ private:
 
 	int32 ViewportSizeX, ViewportSizeY;
 
-	ATank* GetControlledTank() const;
+	
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
@@ -49,5 +53,5 @@ private:
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
 
-	void OutputPlayerControllerAimInAimComponent(FVector HitLocation);
+	
 };

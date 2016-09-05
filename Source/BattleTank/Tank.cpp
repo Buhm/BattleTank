@@ -36,12 +36,42 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 }
 
-void ATank::OutputPlayerControllerAimInAimingComponent(FVector HitLocation)
+
+void ATank::AimAt(FVector HitLocation)
 {
-		TankAimingComponent->AimAt(HitLocation);
-		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
-	
+	if (!barrel) { return; }
+
+	FVector OutLaunchVelocity;
+	FVector StartLocation = barrel->GetSocketLocation(FName("Projectile"));
+
+	//calculate the outLaunchVelocity 
+
+
+	if (UGameplayStatics::SuggestProjectileVelocity(
+
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	)
+
+		) //calculate launch velocity
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		auto TankName = GetOwner()->GetName();
+		TankAimingComponent->AimAt(HitLocation, OutLaunchVelocity);
+		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *TankName, *HitLocation.ToString())
+
+	}
+
+
 }
+
 
 void ATank::setBarrelReference(UStaticMeshComponent* BarrelToSet)
 {

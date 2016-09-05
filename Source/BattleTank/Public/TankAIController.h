@@ -24,6 +24,13 @@ public:
 
 	virtual void BeginPlay() override;
 
+
+protected:
+
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
+private:
+
 	void Tick(float DeltaSeconds);
-	
+
 };

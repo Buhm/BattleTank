@@ -10,7 +10,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	PrimaryActorTick.bCanEverTick = true;
 
-	//no need to protect pointers a added at construction
+	//no need to protect pointers added at construction
 
 	AimTowardsCrosshair();
 	
@@ -45,11 +45,12 @@ void ATankPlayerController::AimTowardsCrosshair()
 	{
 		// get world location of linetrace through crosshair
 			FVector HitLocation; //OUTPARAMETER
-			GetSightRayHitLocation(HitLocation);
 
-			//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
-
-			GetControlledTank()->OutputPlayerControllerAimInAimingComponent(HitLocation);
+			if (GetSightRayHitLocation(HitLocation))
+			{
+				GetControlledTank()->AimAt(HitLocation);
+				//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetName(), *HitLocation.ToString())
+			}
 	}
 
 	return;
