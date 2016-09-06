@@ -6,18 +6,18 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+class UTank_Barrel;
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-
-	UFUNCTION(BluePrintCallable, Category = Setup)
-	void setBarrelReference(UStaticMeshComponent* BarrelToSet);
 
 	void AimAt(FVector HitLocation);
+
+	void setBarrelReference(UTank_Barrel* BarrelToSet);
 
 protected:
 

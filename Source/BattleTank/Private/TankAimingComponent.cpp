@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "Tank_Barrel.h"
 #include "TankAimingComponent.h"
 
 
@@ -16,64 +17,51 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-
-void UTankAimingComponent::setBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::setBarrelReference(UTank_Barrel* BarrelToSet)
 {
+
 	Barrel = BarrelToSet;
+
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
-{
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-
-	// ...
-}
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	if (Barrel) {
+	if (!Barrel) { return; }
 
-		FVector OutLaunchVelocity;
-		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	FVector OutLaunchVelocity;
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
-		//calculate the outLaunchVelocity 
+	//calculate the outLaunchVelocity 
 
-		if (UGameplayStatics::SuggestProjectileVelocity(
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
+	(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
+	if (bHaveAimSolution)
+	{
+		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 
-			this,
-			OutLaunchVelocity,
-			StartLocation,
-			HitLocation,
-			LaunchSpeed,
-			false,
-			0,
-			0,
-			ESuggestProjVelocityTraceOption::DoNotTrace
-		)
-
-			) //calculated launch velocity
-		{
-			FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
-
-			UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetOwner()->GetName(), *AimDirection.ToString())
-
-		}
-
+			MoveBarrelTowards(AimDirection);
 	}
 
+	 //calculated launch velocity and provided the output, protected the pointer
 }
 
 
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	//work out difference between current barrel rotation and aimdirection
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
+	float DegreesPerSecond = 5;
+	Barrel->Elevate(DegreesPerSecond);
 
+}
