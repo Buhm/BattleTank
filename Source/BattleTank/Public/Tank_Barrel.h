@@ -8,7 +8,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
 class BATTLETANK_API UTank_Barrel : public UStaticMeshComponent
 {
 	GENERATED_BODY()
@@ -20,5 +20,13 @@ public:
 
 private:
 
+	UPROPERTY(EditAnywhere, category = setup)
+		float MaxDegreesPerSecond = 20;
 	
+	UPROPERTY(EditAnywhere, category = setup)
+		float MaxElevationAngleDegrees = 40;
+
+	UPROPERTY(EditAnywhere, category = setup)
+		float MinElevationAngleDegrees = 0;
+
 };
