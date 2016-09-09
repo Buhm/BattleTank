@@ -27,12 +27,13 @@ public:
 
 	void AimAt(FVector HitLocation);
 
-	UPROPERTY(EditAnywhere, category = firing)
-		float LaunchSpeed = 8000.; // TODO Find sensible default value later on
-	
 	UTank_Barrel* Barrel = nullptr;
 
 	UTank_Turret* Turret = nullptr;
+
+	UPROPERTY(EditAnywhere, category = firing)
+		float LaunchSpeed = 4000.; // TODO continu to Find sensible default value later on
+
 
 private:
 

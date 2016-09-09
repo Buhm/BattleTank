@@ -31,7 +31,6 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 }
 
 
-
 void ATank::AimAt(FVector HitLocation)
 {
 		TankAimingComponent->AimAt(HitLocation);
@@ -50,3 +49,10 @@ void ATank::setTurretReference(UTank_Turret* TurretToSet)
 	TankAimingComponent->setTurretReference(TurretToSet);
 }
 
+
+void ATank::Fire()
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("%s: Firing"), *GetName())
+
+}
