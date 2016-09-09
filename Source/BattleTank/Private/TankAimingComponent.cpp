@@ -2,6 +2,7 @@
 
 #include "BattleTank.h"
 #include "Tank_Barrel.h"
+#include "Tank_Turret.h"
 #include "TankAimingComponent.h"
 
 
@@ -11,9 +12,8 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
-	PrimaryComponentTick.bCanEverTick = true;
-
-
+	PrimaryComponentTick.bCanEverTick = true; //TODO should this really tick?
+	
 	// ...
 }
 
@@ -21,6 +21,13 @@ void UTankAimingComponent::setBarrelReference(UTank_Barrel* BarrelToSet)
 {
 
 	Barrel = BarrelToSet;
+
+}
+
+void UTankAimingComponent::setTurretReference(UTank_Turret* TurretToSet)
+{
+
+	Turret = TurretToSet;
 
 }
 
@@ -41,15 +48,29 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 		StartLocation,
 		HitLocation,
 		LaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 	if (bHaveAimSolution)
 	{
+
+		auto Time = GetWorld()->GetTimeSeconds();
+		//UE_LOG(LogTemp, Warning, TEXT("%f: Aim Solution Found"), Time);
+
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+		MoveTurretTowards(AimDirection);
 
-			MoveBarrelTowards(AimDirection);
 	}
+	else
+	{
 
+		auto Time = GetWorld()->GetTimeSeconds();
+		//UE_LOG(LogTemp, Warning, TEXT("%f: NO Aim Solution Found"), Time);
+
+	}
 	 //calculated launch velocity and provided the output, protected the pointer
 }
 
@@ -61,7 +82,17 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	float DegreesPerSecond = 5;
-	Barrel->Elevate(DegreesPerSecond);
+		Barrel->Elevate(DeltaRotator.Pitch);
+}
+
+void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+{
+	//work out difference between current barrel rotation and aimdirection
+	auto TurretRotator = Turret->GetRightVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - TurretRotator;
+	// find the yaw for the crosshair to stop the tank turning when crosshair yaw location is reached
+
+		Turret->SideRotate(DeltaRotator.Yaw);
 
 }

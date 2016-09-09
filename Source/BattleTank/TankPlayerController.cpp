@@ -2,6 +2,7 @@
 
 
 #include "BattleTank.h"
+#include "Tank.h"
 #include "TankPlayerController.h" //must be the last include
 
 
@@ -119,6 +120,18 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 
 		}
 	
+		UE_LOG(LogTemp, Warning, TEXT("test"))
+		//draws the debug line
+		DrawDebugLine(GetWorld(),
+			StartLocation,
+			EndLocation,
+			FColor(255, 0, 0),
+			false,
+			0.0f,
+			0,
+			10.0f
+		);
+
 
 	return false;	
 }

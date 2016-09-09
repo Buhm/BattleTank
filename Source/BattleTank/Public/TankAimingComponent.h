@@ -2,12 +2,13 @@
 
 #pragma once
 
-#include "BattleTank.h"
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
-//forward declaration
+//forward declarations
+class BattleTank;
 class UTank_Barrel; 
+class UTank_Turret;
 
 //Holds barrel's properties and elevate method.
 
@@ -22,17 +23,22 @@ public:
 
 	void setBarrelReference(UTank_Barrel* BarrelToSet);
 
-	//TODO add SetTurretReference
+	void setTurretReference(UTank_Turret* TurretToSet);
 
 	void AimAt(FVector HitLocation);
 
 	UPROPERTY(EditAnywhere, category = firing)
-		float LaunchSpeed = 100000.; // TODO Find sensible default value later on
-
+		float LaunchSpeed = 8000.; // TODO Find sensible default value later on
+	
 	UTank_Barrel* Barrel = nullptr;
+
+	UTank_Turret* Turret = nullptr;
 
 private:
 
 	void MoveBarrelTowards(FVector AimDirection);
+
+	void MoveTurretTowards(FVector AimDirection);
+
 };
 

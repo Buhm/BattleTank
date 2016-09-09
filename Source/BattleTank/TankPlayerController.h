@@ -3,13 +3,15 @@
 #pragma once
 
 #define Int32 = int;
-#include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
+
+class ATank;
 
 /**
  * 
  */
+
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
