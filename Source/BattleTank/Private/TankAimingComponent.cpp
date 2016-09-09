@@ -61,7 +61,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
-		MoveTurretTowards(AimDirection);
 
 	}
 	else
@@ -83,16 +82,5 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
 		Barrel->Elevate(DeltaRotator.Pitch);
-}
-
-void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
-{
-	//work out difference between current barrel rotation and aimdirection
-	auto TurretRotator = Turret->GetRightVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimAsRotator - TurretRotator;
-	// find the yaw for the crosshair to stop the tank turning when crosshair yaw location is reached
-
 		Turret->SideRotate(DeltaRotator.Yaw);
-
 }

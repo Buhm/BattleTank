@@ -9,13 +9,11 @@ void UTank_Turret::SideRotate(float DeltaRotator)  // feed it the (yaw) crosshai
 {
 	float ClampedDeltaRotator = FMath::Clamp<float>(DeltaRotator, -1, +1);
 
-	float RotationChange = ClampedDeltaRotator* 70.0f * GetWorld()->DeltaTimeSeconds;
-	float RawNewRotation = RelativeRotation.Yaw + RotationChange;
+	float RotationChange = ClampedDeltaRotator* MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
+	float Rotation = RelativeRotation.Yaw + RotationChange;
 
-	float Rotation = FMath::Clamp<float>(RawNewRotation, 0.0f, 0.0f);
+	SetRelativeRotation(FRotator(0, Rotation, 0));
 
-	SetRelativeRotation(FRotator(0, RawNewRotation, 0));
-
-	UE_LOG(LogTemp, Warning, TEXT("%f: RawNewRotation"), RawNewRotation);
+	//UE_LOG(LogTemp, Warning, TEXT("%f: RawNewRotation"), RawNewRotation);
 
 }
