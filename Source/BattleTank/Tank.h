@@ -6,6 +6,7 @@
 #include "Tank.generated.h"
 
 class UTank_Barrel;
+class AProjectile; 
 class UTankAimingComponent;
 
 UCLASS()
@@ -42,5 +43,10 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	
+	UPROPERTY(EditAnywhere, category = Setup)
+		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	//local barrel refeerence for spawning projectiles
+	UTank_Barrel* Barrel = nullptr;
 
 };
